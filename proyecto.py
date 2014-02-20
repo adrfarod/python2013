@@ -113,13 +113,50 @@ def crearGeneral(lista):
     return base
 
 def  mostrarTodo(lista):
-    for n in range(len(lista)):
-        print ('devId '+lista[n].device.id)
-        print ('devUsr '+lista[n].device.user)
-        print ('devFB '+lista[n].device.fall)
-        print ('GrId '+lista[n].group.id)
-        print ('cbN '+lista[n].capability.name)
-        print ('cbV '+lista[n].capability.value)
+	contador = 0
+	valueP = []
+	for n in range(len(lista)):
+		prueba = lista[n].capability.name
+		if 'release_date' in prueba:
+			valor = lista[n].capability.value
+			if '2000' in valor:
+				valueP.append(valor)
+				#limpiarLetras = limpiar(valueP)
+				contador = contador+1
+				print('entro el value '+lista[n].device.id)
+	contadorN = contador/9
+	print (contadorN)
+
+def mostrarSoniesEr(lista):
+	contador = 0
+	for n in range(len(lista)):
+		llamada = lista[n].device.fall
+		if 'sonyericsson_402_generic' in llamada:
+			for j in range(len(lista)):
+				ide = lista[j].device.id
+				if llamada in ide: 
+					fallb = lista[j].device.fall
+					print ('el fallback de '+llamada+' \n'+'proviene de '+fallb)
+					contador = contador+1
+	print (contador)
+		
+def mostrarPadres(lista,llamada):
+	for n in range(len(lista)):
+		ide = lista[n].device.id
+		while (ide != 'generic'):
+			for j in range(len(lista)):
+				id1 = lista[j].device.id
+				if llamada in id1:
+					print (id1)
+
+
+
+def limpiar(lineas):
+	nuevaslineas = []
+	for str in lineas:
+		nuevaslinea = str.replace('a','').replace('_','').split()
+		nuevaslineas.append(nuevaslinea)
+	return nuevaslineas
 
 def mostrarNumDev(lista):
 	cont = 0
@@ -145,24 +182,23 @@ def mostrarNumCb(lista):
 	print (cont)
 	return cont 
 
-def buscarDevice(arregloSplit,member,tipe):
-	contador = 0
-	for i in range(len(arregloSplit)):
-		if arregloSplit[i].device.fall == member:
-			if arregloSplit[i+1] == tipe:
-				print (arregloSplit[i+1])
-				contador = contador+1
-	return contador
+#def buscarDevice(arregloSplit,member,tipe):
+#	contador = 0
+	#for i in range(len(arregloSplit)):
+	#	if arregloSplit[i].device.fall == member:
+	#		if arregloSplit[i+1] == tipe:
+	#			print (arregloSplit[i+1])
+	#			contador = contador+1
+	#return contador
 
-
-with open('prueba.xml') as archivo:
+with open('wurfl23.xml') as archivo:
         lineasCodigo = archivo.read().splitlines()
 nuevasLineas = limpiarComentario(lineasCodigo)
 espaciosRemovidos = limpiarEspaciosBlancos(nuevasLineas)
 crearTotal = crearGeneral(espaciosRemovidos)
-mostrarTodo(crearTotal)
-dispou = buscarDevice(crearTotal,'fall_back','root')
-print (dispou)
+mostrarSoniesEr(crearTotal)
+#dispou = buscarDevice(crearTotal,'fall_back','root')
+#print (dispou)
 
 
 #arbolPrincipal = ET.parse('wurfl23.xml')
